@@ -1,0 +1,11 @@
+let rec prefixes zs = 
+	let (+:) x xs = x::xs
+	in match zs with
+	| [] -> []
+	| t::ts -> [t] :: (List.map ((+:) t) (prefixes ts));;
+
+let suffixes xs =
+	let rec suffwacc xs acc = match xs with
+		| [] -> List.rev acc
+		| _::ys as ts -> suffwacc ys (ts::acc)
+	in suffwacc xs [];;

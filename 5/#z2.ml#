@@ -1,0 +1,35 @@
+type 'a llist = LNil | LCons of 'a * (unit -> 'a llist);;
+
+let rec toLazy = function
+	| [] -> LNil
+	| x::xs -> LCons(x, function () -> toLazy xs);;
+
+let rec (@$) ll1 ll2 =
+	match ll1 with
+		| LNil -> ll2
+		| LCons(x, xf) -> LCons(x, function () -> (xf ()) @$ ll2);;
+
+let rec lmap f = function
+	| LNil -> LNil
+	| LCons(x, xf) -> LCons(f x, function () -> lmap f (xf()));;
+
+let lEmptyQueue = []
+let enqueue_el x lqueue = lqueue @$ [x];;
+let enqueue_els xs lqueue = lqueue @$ xs;;
+let dequeue = function
+	| LNil -> failwith "Trying to dequeue from empty queue"
+	| LCons(x, qsf) -> (x, qsf());;
+
+let bfsstates next_from state =
+	let rec bfs queue = match queue with
+		| [] -> LNil
+		| (h::t) -> 
+
+let lbfs next state =
+	let rec bfs lqueue = try 
+		let (MNode(n, _) as mtree, nqueue) = dequeue queue 
+			in let chldrn = children_mtr mtree
+				in bfs (enqueue_els chldrn nqueue) (n::acc)
+		with
+			| _ -> List.rev acc
+	in bfs (enqueue_el state lEmptyQueue) [];;
